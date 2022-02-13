@@ -283,6 +283,33 @@ body{
   margin: 0;
 }
 
+.ingame-overlay {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+}
+
+.ingame-overlay img {
+  height: 100%;
+}
+
+.ingame-team {
+  width: 252px;
+  position: absolute;
+  top: 3px;
+  height: 58px;
+  color: white;
+  font-size: 40px;
+  letter-spacing: 2px;
+}
+
+.ingame-team:nth-child(1) {
+  left: 248px;
+}
+
+.ingame-team:nth-child(2) {
+  right: 237px;
+}
 
 @-moz-keyframes champBannedAnimation {
   0% {

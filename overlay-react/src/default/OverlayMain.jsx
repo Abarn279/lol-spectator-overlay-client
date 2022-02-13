@@ -8,11 +8,13 @@ import "./style/index_alt.css"
 import Pick from "./Pick";
 import Timer from "./Timer";
 import ReconnectingWebSocket from "reconnecting-websocket"
+import IngameTeam from "./IngameTeam";
 
 export default class Overlay extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			gameStarted: false,
 			started: false,
 			bluePicks: [
 				{},
@@ -49,59 +51,49 @@ export default class Overlay extends React.Component {
 			redTextColor: "#fff",
 			phaseTextColor: "#fff",
 			blueTeamName: "",
+			blueTeamAbbr: "",
 			blueTeamSubtext: "",
 			redTeamName: "",
+			redTeamAbbr: "",
 			redTeamSubText: "",
-			pickingText:"Picking",
-			enableTransparent:false,
+			pickingText: "Picking",
+			enableTransparent: false,
 		}
 	}
 
 
 	componentDidMount() {
 		let ws = new ReconnectingWebSocket(this.props.backend)
-		var endTimeout = null;
-		let _this = this
-		ws.onopen = function (ev) {
-			// console.log(ev)
-			// ws.send("hello")
-		}
-		ws.onmessage = function (msg) {
-			console.log(msg)
+		ws.onmessage = (msg) => {
 			var msgJson = JSON.parse(msg.data)
-			console.log(msgJson)
 			if (msgJson.event === "championSelectStarted") {
-				// setChampSelectEnded(false);
-				_this.champSelectEnded = false
-				// if(endTimeout!=null)
-				// 	clearTimeout(endTimeout);
-				// endTimeout=null;
+				this.champSelectEnded = false
 			}
+
 			if (msgJson.event === "newState") {
-				// setGlobalState(msgJson.data)
 				console.log(this)
-				_this.setState(msgJson.data)
+				this.setState(msgJson.data)
 			}
+
 			if (msgJson.event === "championSelectEnded") {
 				console.log("champSelectEnded")
-				// endTimeout = setTimeout(()=>{
-				// setChampSelectEnded(true)
-				// setGlobalState(pickOrderState)
-				// }, 5*60*1000)
-
 			}
+
 			if (msgJson.event === "newConfig") {
 				console.log(msgJson.data)
-				_this.config = msgJson.data
-				_this.setState(_this.state)
-
+				this.config = msgJson.data
+				this.setState(this.state)
 			}
 
-			// if(msgJson.event==="newPickOrder"){
-			// 	console.log("newPickOrder")
-			// 	pickOrderState=msgJson.data;
-			// 	console.log(pickOrderState)
-			// }
+			if (msgJson.event === "startGame") {
+				this.setState({ ...this.state, gameStarted: true })
+				console.log(this.state);
+			}
+
+			if (msgJson.event === "endGame") {
+				console.log("Game ended");
+				this.setState({ ...this.state, gameStarted: false })
+			}
 		}
 	}
 
@@ -117,7 +109,7 @@ export default class Overlay extends React.Component {
 			}
 			else {
 				bluePicks = this.state.bluePicks.map((pick, index) => (
-					<Pick key={"pick-" + index} {...pick} pickingText={this.config.pickingText}/>
+					<Pick key={"pick-" + index} {...pick} pickingText={this.config.pickingText} />
 				));
 			}
 		}
@@ -125,12 +117,12 @@ export default class Overlay extends React.Component {
 		if (this.state.redPicks) {
 			if (this.config.enableCustomNames) {
 				redPicks = this.state.redPicks.map((pick, index) => (
-					<Pick key={"pick-" + index} {...pick} summonerName={this.config.names[index + 5]} pickingText={this.config.pickingText}/>
+					<Pick key={"pick-" + index} {...pick} summonerName={this.config.names[index + 5]} pickingText={this.config.pickingText} />
 				));
 			}
 			else {
 				redPicks = this.state.redPicks.map((pick, index) => (
-					<Pick key={"pick-" + index} {...pick} pickingText={this.config.pickingText}/>
+					<Pick key={"pick-" + index} {...pick} pickingText={this.config.pickingText} />
 				));
 			}
 		}
@@ -154,71 +146,82 @@ export default class Overlay extends React.Component {
 			"--left-side-text-color": this.config.blueTextColor, "--right-side-text-color": this.config.redTextColor, "--phase-text-color": this.config.phaseTextColor
 		};
 
-		return (
-			<div
-				className="overlay"
-				style={style} //{{ width: 1280, height: 720 ,zoom:1.25 }}
-				className={cx("overlay", this.state.actingSide + "-acting", {"transparent": this.config.enableTransparent})}
-			>
-				<div className="champion-select-header">
-					<div className="blue-team-info">
-						<h1>{this.config.blueTeamName}</h1>
-						<h5>{this.config.blueTeamSubtext}</h5>
-					</div>
-					<Timer
-						side="blue"
-						visible={
-							this.state.actingSide === "blue" ||
-							this.state.actingSide === "none"
-						}
-						time={this.state.time}
-						actingSide={this.state.actingSide}
-						timestamp={this.state.timestamp}
-					/>
-					<div className="header-keystone">
-						<div className="left-bg-section"></div>
-						<div className="right-bg-section"></div>
-						<div className="header-keystone-inner">
+		if (!this.state.gameStarted) {
+			return (
+				<div
+					className="overlay"
+					style={style} //{{ width: 1280, height: 720 ,zoom:1.25 }}
+					className={cx("overlay", this.state.actingSide + "-acting", { "transparent": this.config.enableTransparent })}
+				>
+					<div className="champion-select-header">
+						<div className="blue-team-info">
+							<h1>{this.config.blueTeamName}</h1>
+							<h5>{this.config.blueTeamSubtext}</h5>
+						</div>
+						<Timer
+							side="blue"
+							visible={
+								this.state.actingSide === "blue" ||
+								this.state.actingSide === "none"
+							}
+							time={this.state.time}
+							actingSide={this.state.actingSide}
+							timestamp={this.state.timestamp}
+						/>
+						<div className="header-keystone">
 							<div className="left-bg-section"></div>
 							<div className="right-bg-section"></div>
-							<div className={cx("phase", { "transparent": this.state.phase === "" })} >{this.state.phase}</div>
+							<div className="header-keystone-inner">
+								<div className="left-bg-section"></div>
+								<div className="right-bg-section"></div>
+								<div className={cx("phase", { "transparent": this.state.phase === "" })} >{this.state.phase}</div>
+							</div>
+						</div>
+
+						<Timer
+							side="red"
+							visible={
+								this.state.actingSide === "red" ||
+								this.state.actingSide === "none"
+							}
+							time={this.state.time}
+							actingSide={this.state.actingSide}
+							timestamp={this.state.timestamp}
+						/>
+						<div className="red-team-info">
+							<h1>{this.config.redTeamName}</h1>
+							<h5>{this.config.redTeamSubText}</h5>
 						</div>
 					</div>
 
-					<Timer
-						side="red"
-						visible={
-							this.state.actingSide === "red" ||
-							this.state.actingSide === "none"
-						}
-						time={this.state.time}
-						actingSide={this.state.actingSide}
-						timestamp={this.state.timestamp}
-					/>
-					<div className="red-team-info">
-						<h1>{this.config.redTeamName}</h1>
-						<h5>{this.config.redTeamSubText}</h5>
-					</div>
-				</div>
-
-				<div className="party" id="blueParty">
-					{bluePicks}
-				</div>
-
-				<div className="party" id="redParty">
-					{redPicks}
-				</div>
-
-				<div className="champSelectFooter">
-					<div className="bans" id="blueBans">
-						{blueBans}
+					<div className="party" id="blueParty">
+						{bluePicks}
 					</div>
 
-					<div className="bans" id="redBans">
-						{redBans}
+					<div className="party" id="redParty">
+						{redPicks}
 					</div>
+
+					<div className="champSelectFooter">
+						<div className="bans" id="blueBans">
+							{blueBans}
+						</div>
+
+						<div className="bans" id="redBans">
+							{redBans}
+						</div>
+					</div>
+				</div>
+			);
+		}
+		else {
+			return <div className="ingame-overlay">
+				<img src={require("../assets/ingameoverlay.png").default} />
+				<div class="teams">
+					<IngameTeam abbr="ABC" score={0} />
+					<IngameTeam abbr="DEF" score={0} />
 				</div>
 			</div>
-		);
+		}
 	}
 }
