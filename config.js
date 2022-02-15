@@ -42,6 +42,37 @@ updateImages.addEventListener('click', () => {
 	})
 })
 
+/* START - TIMER */
+var timerInput = document.getElementById("timer_input");
+var timerStart = document.getElementById("timer_start");
+var timerRep = document.getElementById("timer_rep");
+const timerPattern = /^\d\d?:\d\d$/
+
+var secondsLeft = 0;
+
+timerStart.addEventListener('click', (e) => {
+	let currentTime = timerInput.value;
+
+	// return if the regex fails
+	if (!timerPattern.test(currentTime)) return;
+
+	var [minutes, seconds] = currentTime.split(':');
+
+	// seconds can't be over 59
+	if (+seconds > 59) return;
+
+	secondsLeft = +seconds + +minutes * 60;
+});
+
+setInterval(() => {
+	if (secondsLeft > 0) {
+		ipc.send("timerUpdated", secondsLeft);
+		secondsLeft -= 1;
+		timerRep.innerHTML = `${Math.floor(secondsLeft / 60)}:${secondsLeft % 60}`;
+	}
+}, 1000)
+/* END - TIMER */
+
 var blueColorInput = document.getElementById("blue_selected_color");
 var redColorInput = document.getElementById("red_selected_color");
 var timerTextColorInput = document.getElementById("timer_text_selected_color");

@@ -138,6 +138,7 @@ ipcMain.handle('update-images', () => {
     checkForNewChampionImages();
 });
 
+/* Begin: Start/end game */
 ipcMain.on("startGame", () => {
     webSocketServer.sendToAllClients(JSON.stringify({ "event": "startGame", "data": {} }))
 })
@@ -145,6 +146,14 @@ ipcMain.on("startGame", () => {
 ipcMain.on("endGame", () => {
     webSocketServer.sendToAllClients(JSON.stringify({ "event": "endGame", "data": {} }))
 })
+/* End: Start/end game */
+
+/* Begin: TIMER */
+ipcMain.on("timerUpdated", (e, time) => {
+
+})
+
+/* End: TIMER */
 
 setInterval(() => {
     var serverStatus = {
