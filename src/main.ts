@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, ipcMain, shell } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import * as path from "path";
 import EventEmitter from "events"
 import mergePatch from "json8-merge-patch"
@@ -6,6 +6,7 @@ import * as fs from "fs"
 import express from "express"
 import { checkForNewChampionImages } from './downloadImages';
 import MyWebSocketServer from './WebSocketServer';
+const ioHook = require('iohook');
 
 const WEBSERVER_PORT = 36501
 const WEBSOCKET_SERVER_PORT = 36502
@@ -155,3 +156,12 @@ setInterval(() => {
     winConf.webContents.send("serverStatus", serverStatus)
 }, 5000)
 
+// iohook to send events to show/hide overlay
+ioHook.on('keyup', (event) => {
+    if (event.rawcode === 65)
+        webSocketServer.sendToAllClients(JSON.stringify({ "event": "hideIngameOverlay", "data": {} }));
+    if (event.rawcode === 79)
+        webSocketServer.sendToAllClients(JSON.stringify({ "event": "showIngameOverlay", "data": {} }));
+});
+
+ioHook.start();

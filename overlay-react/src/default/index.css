@@ -287,6 +287,7 @@ body{
   position: relative;
   width: 1920px;
   height: 1080px;
+  font-family: 'Roboto', sans-serif;
 }
 
 .ingame-overlay img {
@@ -298,6 +299,7 @@ body{
   position: absolute;
   top: 3px;
   height: 58px;
+  padding-top: 5px;
   color: white;
   font-size: 40px;
   letter-spacing: 2px;
@@ -309,6 +311,33 @@ body{
 
 .ingame-team:nth-child(2) {
   right: 237px;
+}
+
+.ingame-stream-title {
+  padding-top: 7px;
+  position: absolute;
+  width: 696px;
+  top: 789px;
+  left: 618px;
+  height: 55px;
+  font-size: 36px;
+  color: white;
+  letter-spacing: 2px;
+}
+
+.ingame-logo-holder {
+  position: absolute;
+  bottom: 2px;
+  height: 270px;
+  left: 2px; 
+  width: 310px;
+  border: 1px solid pink;
+}
+
+.ingame-logo-holder img {
+  margin: auto;
+  height: 200px;
+  margin-top: 35px;
 }
 
 @-moz-keyframes champBannedAnimation {

@@ -15,6 +15,7 @@ export default class Overlay extends React.Component {
 		super(props);
 		this.state = {
 			gameStarted: false,
+			showInGameOverlay: true,
 			started: false,
 			bluePicks: [
 				{},
@@ -44,6 +45,7 @@ export default class Overlay extends React.Component {
 			actingSide: "blue",
 		};
 		this.config = {
+			streamTitle: "",
 			blueColor: "#0b849e",
 			redColor: "#be1e37",
 			timerColor: "#ffffff",
@@ -87,12 +89,18 @@ export default class Overlay extends React.Component {
 
 			if (msgJson.event === "startGame") {
 				this.setState({ ...this.state, gameStarted: true })
-				console.log(this.state);
 			}
 
 			if (msgJson.event === "endGame") {
-				console.log("Game ended");
 				this.setState({ ...this.state, gameStarted: false })
+			}
+
+			if (msgJson.event === "showIngameOverlay") {
+				this.setState({ ...this.state, showInGameOverlay: true })
+			}
+
+			if (msgJson.event === "hideIngameOverlay") {
+				this.setState({ ...this.state, showInGameOverlay: false })
 			}
 		}
 	}
@@ -215,13 +223,19 @@ export default class Overlay extends React.Component {
 			);
 		}
 		else {
-			return <div className="ingame-overlay">
+			return this.state.showInGameOverlay 
+			? <div className="ingame-overlay">
 				<img src={require("../assets/ingameoverlay.png").default} />
 				<div class="teams">
-					<IngameTeam abbr="ABC" score={0} />
-					<IngameTeam abbr="DEF" score={0} />
+					<IngameTeam abbr={this.config.blueTeamAbbr} score={0} />
+					<IngameTeam abbr={this.config.redTeamAbbr} score={0} />
 				</div>
-			</div>
+				<div class="ingame-stream-title">{this.config.streamTitle}</div>
+				<div class="ingame-logo-holder">
+					<img src={require("../assets/mini.png").default} />
+				</div>
+			</div> 
+			: <></>
 		}
 	}
 }

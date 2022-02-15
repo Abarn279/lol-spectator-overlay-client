@@ -55,6 +55,7 @@ var timerColorHex = document.getElementById("timer_color_hex")
 var blueTextColorHex = document.getElementById("blue_text_color_hex")
 var redTextColorHex = document.getElementById("red_text_color_hex")
 var phaseTextColorHex = document.getElementById("phase_text_color_hex")
+var streamTitle = document.getElementById("stream_title")
 var blueTeamName = document.getElementById("blue_team_name")
 var blueTeamAbbr = document.getElementById("blue_team_abbr")
 var blueTeamSubtext = document.getElementById("blue_team_subtext")
@@ -126,6 +127,7 @@ ipc.on("newConfig", (event, newConfig) => {
 	redTextColorInput.setAttribute("value", config.redTextColor)
 	phaseTextColorInput.setAttribute("value", config.phaseTextColor)
 
+	streamTitle.setAttribute("value", config.streamTitle);
 	blueTeamName.setAttribute("value", config.blueTeamName)
 	blueTeamAbbr.setAttribute("value", config.blueTeamAbbr)
 	blueTeamSubtext.setAttribute("value", config.blueTeamSubtext)
@@ -182,6 +184,7 @@ updateButton.addEventListener("click", function () {
 			summonerNameInput9.value,
 			summonerNameInput10.value,
 		],
+		streamTitle: streamTitle.value,
 		blueTeamName: blueTeamName.value,
 		blueTeamAbbr: blueTeamAbbr.value,
 		blueTeamSubtext: blueTeamSubtext.value,
