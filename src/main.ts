@@ -91,7 +91,16 @@ ipcMain.handle("connect-to-client", async (event) => {
 server = express();
 
 console.log(path.join(__dirname, "..", "build"));
+
 server.use(express.static(path.join(__dirname, "..", "build")));
+
+server.get('/images/*', function(req,res) {
+    res.sendFile(path.join(app.getPath('userData'), "images", req.params[0]))
+})
+
+server.get('*', function(req,res) {
+    res.sendFile(path.join(__dirname,"..", "build", "index.html"))
+})
 
 serverSocket = server.listen(WEBSERVER_PORT, () => {
     console.log("server started om port " + WEBSERVER_PORT)
