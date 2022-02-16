@@ -148,18 +148,14 @@ ipcMain.handle('update-images', () => {
 });
 
 /* Begin: Start/end game */
-ipcMain.on("startGame", () => {
-    webSocketServer.sendToAllClients(JSON.stringify({ "event": "startGame", "data": {} }))
-})
-
-ipcMain.on("endGame", () => {
-    webSocketServer.sendToAllClients(JSON.stringify({ "event": "endGame", "data": {} }))
+ipcMain.on("selectView", (e, viewSelected) => {
+    webSocketServer.sendToAllClients(JSON.stringify({ "event": "selectView", "data": viewSelected }))
 })
 /* End: Start/end game */
 
 /* Begin: TIMER */
 ipcMain.on("timerUpdated", (e, time) => {
-
+    webSocketServer.sendToAllClients(JSON.stringify({ "event": "timerUpdated", "data": time }))
 })
 
 /* End: TIMER */

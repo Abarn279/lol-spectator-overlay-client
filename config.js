@@ -90,9 +90,11 @@ var streamTitle = document.getElementById("stream_title")
 var blueTeamName = document.getElementById("blue_team_name")
 var blueTeamAbbr = document.getElementById("blue_team_abbr")
 var blueTeamSubtext = document.getElementById("blue_team_subtext")
+var blueTeamScore = document.getElementById("blue_team_score")
 var redTeamName = document.getElementById("red_team_name")
 var redTeamAbbr = document.getElementById("red_team_abbr")
 var redTeamSubtext = document.getElementById("red_team_subtext")
+var redTeamScore = document.getElementById("red_team_score")
 var pickingText = document.getElementById("picking_text")
 
 blueColorInput.addEventListener("change", (ev) => {
@@ -162,9 +164,11 @@ ipc.on("newConfig", (event, newConfig) => {
 	blueTeamName.setAttribute("value", config.blueTeamName)
 	blueTeamAbbr.setAttribute("value", config.blueTeamAbbr)
 	blueTeamSubtext.setAttribute("value", config.blueTeamSubtext)
+	blueTeamScore.setAttribute("value", config.blueTeamScore);
 	redTeamName.setAttribute("value", config.redTeamName)
 	redTeamAbbr.setAttribute("value", config.redTeamAbbr)
 	redTeamSubtext.setAttribute("value", config.redTeamSubText)
+	redTeamScore.setAttribute("value", config.redTeamScore)
 	pickingText.setAttribute("value", config.pickingText)
 
 	enableCustomNamesInput.setAttribute("checked", config.enableCustomNames)
@@ -182,11 +186,14 @@ ipc.on("newConfig", (event, newConfig) => {
 ipc.send("getConfig")
 
 /* Start/end game */
-document.getElementById("startGame").addEventListener("click", () => {
-	ipc.send("startGame", {});
+document.getElementById("pregame_view").addEventListener("click", () => {
+	ipc.send("selectView", 0);
 });
-document.getElementById("endGame").addEventListener("click", () => {
-	ipc.send("endGame", {});
+document.getElementById("champ_select_view").addEventListener("click", () => {
+	ipc.send("selectView", 1);
+});
+document.getElementById("ingame_view").addEventListener("click", () => {
+	ipc.send("selectView", 2);
 });
 /* End start/end game */
 
@@ -219,9 +226,11 @@ updateButton.addEventListener("click", function () {
 		blueTeamName: blueTeamName.value,
 		blueTeamAbbr: blueTeamAbbr.value,
 		blueTeamSubtext: blueTeamSubtext.value,
+		blueTeamScore: blueTeamScore.value,
 		redTeamName: redTeamName.value,
 		redTeamAbbr: redTeamAbbr.value,
 		redTeamSubText: redTeamSubtext.value,
+		redTeamScore: redTeamScore.value,
 		pickingText: pickingText.value,
 		enableTransparent: enableTransparent.checked
 	})

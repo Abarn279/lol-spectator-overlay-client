@@ -61,6 +61,10 @@
 							<label for="blue_team_subtext">Blue team subtext: </label>
 							<input type="text" id="blue_team_subtext">
 						</span>
+						<span>
+							<label for="blue_team_score">Blue team score: </label>
+							<input type="text" id="blue_team_score">
+						</span>
 						<br />
 						<span>
 							<label for="red_team_name">Red team name: </label>
@@ -74,9 +78,13 @@
 							<label for="red_team_subtext">Red team subtext: </label>
 							<input type="text" id="red_team_subtext">
 						</span>
+						<span>
+							<label for="red_team_score">Red team score: </label>
+							<input type="text" id="red_team_score">
+						</span>
 						<br />
 						<span>
-							<label for="red_team_subtext">Picking text: </label>
+							<label for="picking_text">Picking text: </label>
 							<input type="text" id="picking_text">
 						</span>
 					</div>
@@ -130,10 +138,15 @@
 					</div>
 				</div>
 
-				<h4>Update UI</h4>
+				<h4>Update UI <i>(MUST BE PRESSED FOR CHANGES TO TAKE EFFECT)</i></h4>
 				<button type="button" id="update">Update</button>
-				<button type="button" id="startGame">Start Game</button>
-				<button type="button" id="endGame">End Game</button>
+
+				<h4>Select Active View</h4>
+				<div style="display: flex; margin-bottom: 50px;">
+					<button type="button" class='scene-selector' id="pregame_view">Pre-Game</button>
+					<button type="button" class='scene-selector' id="champ_select_view">Champ Select</button>
+					<button type="button" class='scene-selector' id="ingame_view">Ingame</button>
+				</div>
 			</div>
 			<div class="col">
 				<div id="statusClient" class="status">

@@ -85,3 +85,9 @@ h4 {
   flex-direction: column;
   width: 50%;
 }
+
+.scene-selector {
+  width: 33.33333%;
+  height: 50px;
+
+}
