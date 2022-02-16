@@ -1,4 +1,5 @@
 const electron = require("electron")
+const fs = require('fs');
 const ipc = electron.ipcRenderer
 
 var updateImages = document.getElementById("updateImages")
@@ -7,6 +8,10 @@ var consoleDiv = document.getElementById("my_console")
 
 function log(...args) {
 	args.forEach(arg => consoleDiv.innerHTML += arg + "\n")
+}
+
+if (!fs.existsSync('./logs')){
+  fs.mkdirSync('./logs', {recursive:true});
 }
 
 document.getElementById("startBtn").addEventListener("click", () => {
