@@ -9,11 +9,8 @@
 	<div class="box">
 		<div class="row header">
 			<button id="startBtn">Start Overlay</button>
-			<!-- <button id="stopOverlayBtn" disabled>Stop Overlay</button> -->
 			<button id="loadReplayBtn">Load Replay</button>
 			<button id="connectToClientBtn" disabled>Connect to client</button>
-			<!-- <button id="startWebServer">Start Web Server</button>
-			<button id="stopWebServer" disabled>Stop Web Server</button> -->
 			<button id="updateImages">Update Images</button>
 		</div>
 
@@ -21,7 +18,7 @@
 			<div class=col>
 				<div>
 					<span>
-						<label for="blue_team_name">Stream Title:</label>
+						<label for="stream_title">Stream Title:</label>
 						<input type="text" id="stream_title">
 					</span>
 					<div style="margin-top: 20px">
@@ -50,37 +47,44 @@
 					<div class="text-container">
 						<h4>Team Info</h4>
 						<span>
-							<label for="blue_team_name">Blue team name: </label>
-							<input type="text" id="blue_team_name">
+							<label for="home_team_name">Home team name: </label>
+							<input type="text" id="home_team_name">
 						</span>
 						<span>
-							<label for="blue_team_abbr">Blue team abbr: </label>
-							<input type="text" id="blue_team_abbr">
+							<label for="home_team_abbr">Home team abbr: </label>
+							<input type="text" id="home_team_abbr">
 						</span>
 						<span>
-							<label for="blue_team_subtext">Blue team subtext: </label>
-							<input type="text" id="blue_team_subtext">
+							<label for="home_team_subtext">Home team subtext: </label>
+							<input type="text" id="home_team_subtext">
 						</span>
 						<span>
-							<label for="blue_team_score">Blue team score: </label>
-							<input type="text" id="blue_team_score">
+							<label for="home_team_score">Home team score: </label>
+							<input type="text" id="home_team_score">
+						</span>
+						<span>
+							<label for="away_team_name">Away team name: </label>
+							<input type="text" id="away_team_name">
+						</span>
+						<span>
+							<label for="away_team_abbr">Away team abbr: </label>
+							<input type="text" id="away_team_abbr">
+						</span>
+						<span>
+							<label for="away_team_subtext">Away team subtext: </label>
+							<input type="text" id="away_team_subtext">
+						</span>
+						<span>
+							<label for="away_team_score">Away team score: </label>
+							<input type="text" id="away_team_score">
 						</span>
 						<br />
 						<span>
-							<label for="red_team_name">Red team name: </label>
-							<input type="text" id="red_team_name">
-						</span>
-						<span>
-							<label for="red_team_abbr">Red team abbr: </label>
-							<input type="text" id="red_team_abbr">
-						</span>
-						<span>
-							<label for="red_team_subtext">Red team subtext: </label>
-							<input type="text" id="red_team_subtext">
-						</span>
-						<span>
-							<label for="red_team_score">Red team score: </label>
-							<input type="text" id="red_team_score">
+							<label for="blue_selector">Who is Blue side? </label>
+							<select name="blue_selector" id="blue_selector">
+								<option value="home">Home</option>
+								<option value="away">away</option>
+							</select>
 						</span>
 						<br />
 						<span>
@@ -139,14 +143,7 @@
 				</div>
 
 				<h4>Update UI <i>(MUST BE PRESSED FOR CHANGES TO TAKE EFFECT)</i></h4>
-				<button type="button" id="update">Update</button>
-
-				<h4>Select Active View</h4>
-				<div style="display: flex; margin-bottom: 50px;">
-					<button type="button" class='scene-selector' id="pregame_view">Pre-Game</button>
-					<button type="button" class='scene-selector' id="champ_select_view">Champ Select</button>
-					<button type="button" class='scene-selector' id="ingame_view">Ingame</button>
-				</div>
+				<button type="button" id="update" style="height: 50px; margin-bottom: 10px;">Update</button>
 			</div>
 			<div class="col">
 				<div id="statusClient" class="status">

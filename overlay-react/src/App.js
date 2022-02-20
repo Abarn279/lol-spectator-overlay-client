@@ -8,19 +8,19 @@ function useQuery() {
 }
 
 function App() {
-  try{
+  try {
     let query = useQuery()
     return (
-      <div className="App">  
-          <Overlay backend={query.has('backend') ? query.get('backend'): 'ws://localhost:36502'}></Overlay>
-    </div>
+      <div className="App">
+        <Overlay backend={query.has('backend') ? query.get('backend') : 'localhost:36502'}></Overlay>
+      </div>
     )
-  }catch(e){
+  } catch (e) {
     console.error(e);
     return (
-      <div className="App">  
-          <Overlay></Overlay>
-    </div>
+      <div className="App">
+        <Overlay></Overlay>
+      </div>
     )
   }
 }

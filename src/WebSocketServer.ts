@@ -3,6 +3,8 @@ import WebSocket from 'ws';
 import ReplacableStateApi from './ReplacableStateApi';
 
 export default class MyWebSocketServer {
+    public latestConfig: any;
+
     private wsServer: WebSocket.Server;
     private clients: Array<WebSocket>;
     private port: number;
@@ -25,18 +27,19 @@ export default class MyWebSocketServer {
         this.api = new ReplacableStateApi();
         this.api.connectToClient();
 
-        this.api.on('newState', (state:State)=> currentState = state);
-        this.api.on('newPickOrder', (state:State)=> currentPickOrder = state);
-        this.api.on('championSelectStarted', () => {currentChampionSelectStarted =true; currentChampionSelectEnded=false; })
-        this.api.on('championSelectEnd', () => {currentChampionSelectEnded =true; currentChampionSelectStarted =false;})
-        
-        
+        this.api.on('newState', (state: State) => currentState = state);
+        this.api.on('newPickOrder', (state: State) => currentPickOrder = state);
+        this.api.on('championSelectStarted', () => { currentChampionSelectStarted = true; currentChampionSelectEnded = false; })
+        this.api.on('championSelectEnd', () => { currentChampionSelectEnded = true; currentChampionSelectStarted = false; })
+
+
         this.wsServer = new WebSocket.Server({ port: this.port, host: this.host });
         this.wsServer.on('connection', (ws: WebSocket) => {
             this.clients.push(ws);
 
-            // send current status
+            ws.send(JSON.stringify({ "event": "newConfig", "data": this.latestConfig }));
 
+            // send current status
             if (currentChampionSelectStarted)
                 ws.send(JSON.stringify({ "event": "championSelectStarted" }))
             if (currentState != null)
@@ -87,8 +90,8 @@ export default class MyWebSocketServer {
         });
     }
 
-    getRunningStatus(){
-        if(!this.wsServer){
+    getRunningStatus() {
+        if (!this.wsServer) {
             return "Stopped";
         }
         return "Running";
@@ -98,7 +101,7 @@ export default class MyWebSocketServer {
         this.clients.forEach((client: WebSocket) => {
             client.send(message);
         });
-    
+
     }
 
     public getStateApi() {

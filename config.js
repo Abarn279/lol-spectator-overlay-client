@@ -10,8 +10,8 @@ function log(...args) {
 	args.forEach(arg => consoleDiv.innerHTML += arg + "\n")
 }
 
-if (!fs.existsSync('./logs')){
-  fs.mkdirSync('./logs', {recursive:true});
+if (!fs.existsSync('./logs')) {
+	fs.mkdirSync('./logs', { recursive: true });
 }
 
 document.getElementById("startBtn").addEventListener("click", () => {
@@ -71,8 +71,8 @@ timerStart.addEventListener('click', (e) => {
 
 setInterval(() => {
 	if (secondsLeft > 0) {
-		ipc.send("timerUpdated", secondsLeft);
 		secondsLeft -= 1;
+		ipc.send("timerUpdated", secondsLeft);
 		timerRep.innerHTML = `${Math.floor(secondsLeft / 60)}:${secondsLeft % 60}`;
 	}
 }, 1000)
@@ -92,14 +92,15 @@ var blueTextColorHex = document.getElementById("blue_text_color_hex")
 var redTextColorHex = document.getElementById("red_text_color_hex")
 var phaseTextColorHex = document.getElementById("phase_text_color_hex")
 var streamTitle = document.getElementById("stream_title")
-var blueTeamName = document.getElementById("blue_team_name")
-var blueTeamAbbr = document.getElementById("blue_team_abbr")
-var blueTeamSubtext = document.getElementById("blue_team_subtext")
-var blueTeamScore = document.getElementById("blue_team_score")
-var redTeamName = document.getElementById("red_team_name")
-var redTeamAbbr = document.getElementById("red_team_abbr")
-var redTeamSubtext = document.getElementById("red_team_subtext")
-var redTeamScore = document.getElementById("red_team_score")
+var homeTeamName = document.getElementById("home_team_name")
+var homeTeamAbbr = document.getElementById("home_team_abbr")
+var homeTeamSubtext = document.getElementById("home_team_subtext")
+var homeTeamScore = document.getElementById("home_team_score")
+var awayTeamName = document.getElementById("away_team_name")
+var awayTeamAbbr = document.getElementById("away_team_abbr")
+var awayTeamSubtext = document.getElementById("away_team_subtext")
+var awayTeamScore = document.getElementById("away_team_score")
+var whoIsBlueSide = document.getElementById("blue_selector")
 var pickingText = document.getElementById("picking_text")
 
 blueColorInput.addEventListener("change", (ev) => {
@@ -166,14 +167,15 @@ ipc.on("newConfig", (event, newConfig) => {
 	phaseTextColorInput.setAttribute("value", config.phaseTextColor)
 
 	streamTitle.setAttribute("value", config.streamTitle);
-	blueTeamName.setAttribute("value", config.blueTeamName)
-	blueTeamAbbr.setAttribute("value", config.blueTeamAbbr)
-	blueTeamSubtext.setAttribute("value", config.blueTeamSubtext)
-	blueTeamScore.setAttribute("value", config.blueTeamScore);
-	redTeamName.setAttribute("value", config.redTeamName)
-	redTeamAbbr.setAttribute("value", config.redTeamAbbr)
-	redTeamSubtext.setAttribute("value", config.redTeamSubText)
-	redTeamScore.setAttribute("value", config.redTeamScore)
+	homeTeamName.setAttribute("value", config.homeTeamName)
+	homeTeamAbbr.setAttribute("value", config.homeTeamAbbr)
+	homeTeamSubtext.setAttribute("value", config.homeTeamSubtext)
+	homeTeamScore.setAttribute("value", config.homeTeamScore);
+	awayTeamName.setAttribute("value", config.awayTeamName)
+	awayTeamAbbr.setAttribute("value", config.awayTeamAbbr)
+	awayTeamSubtext.setAttribute("value", config.awayTeamSubText)
+	awayTeamScore.setAttribute("value", config.awayTeamScore)
+	whoIsBlueSide.setAttribute("value", config.whoIsBlueSide)
 	pickingText.setAttribute("value", config.pickingText)
 
 	enableCustomNamesInput.setAttribute("checked", config.enableCustomNames)
@@ -187,20 +189,7 @@ ipc.on("newConfig", (event, newConfig) => {
 	phaseTextColorHex.innerHTML = "(" + config.phaseTextColor + ")"
 });
 
-
 ipc.send("getConfig")
-
-/* Start/end game */
-document.getElementById("pregame_view").addEventListener("click", () => {
-	ipc.send("selectView", 0);
-});
-document.getElementById("champ_select_view").addEventListener("click", () => {
-	ipc.send("selectView", 1);
-});
-document.getElementById("ingame_view").addEventListener("click", () => {
-	ipc.send("selectView", 2);
-});
-/* End start/end game */
 
 var updateButton = document.getElementById("update")
 updateButton.addEventListener("click", function () {
@@ -228,14 +217,15 @@ updateButton.addEventListener("click", function () {
 			summonerNameInput10.value,
 		],
 		streamTitle: streamTitle.value,
-		blueTeamName: blueTeamName.value,
-		blueTeamAbbr: blueTeamAbbr.value,
-		blueTeamSubtext: blueTeamSubtext.value,
-		blueTeamScore: blueTeamScore.value,
-		redTeamName: redTeamName.value,
-		redTeamAbbr: redTeamAbbr.value,
-		redTeamSubText: redTeamSubtext.value,
-		redTeamScore: redTeamScore.value,
+		homeTeamName: homeTeamName.value,
+		homeTeamAbbr: homeTeamAbbr.value,
+		homeTeamSubtext: homeTeamSubtext.value,
+		homeTeamScore: homeTeamScore.value,
+		awayTeamName: awayTeamName.value,
+		awayTeamAbbr: awayTeamAbbr.value,
+		awayTeamSubtext: awayTeamSubtext.value,
+		awayTeamScore: awayTeamScore.value,
+		whoIsBlueSide: whoIsBlueSide.value,
 		pickingText: pickingText.value,
 		enableTransparent: enableTransparent.checked
 	})

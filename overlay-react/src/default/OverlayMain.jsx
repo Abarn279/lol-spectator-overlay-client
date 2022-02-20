@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import cx from "classnames";
 
-// import css from './style/index.less';
 import Ban from "./Ban";
 import "./index.css";
 import "./style/index_alt.css"
@@ -46,21 +45,22 @@ export default class Overlay extends React.Component {
 			actingSide: "blue",
 		};
 		this.config = {
-			streamTitle: "Enter your real stream title!",
+			streamTitle: "TITLE",
 			blueColor: "#0b849e",
 			redColor: "#be1e37",
 			timerColor: "#ffffff",
 			blueTextColor: "#fff",
 			redTextColor: "#fff",
 			phaseTextColor: "#fff",
-			blueTeamName: "",
-			blueTeamAbbr: "ABC",
-			blueTeamSubtext: "",
-			blueTeamScore: 0,
-			redTeamName: "",
-			redTeamAbbr: "DEF",
-			redTeamSubText: "",
-			redTeamScore: 0,
+			homeTeamName: "",
+			homeTeamAbbr: "HOM",
+			homeTeamSubtext: "",
+			homeTeamScore: 0,
+			awayTeamName: "",
+			awayTeamAbbr: "AWY",
+			awayTeamSubtext: "",
+			awayTeamScore: 0,
+			whoIsBlueSide: "home",
 			pickingText: "Picking",
 			enableTransparent: false,
 		}
@@ -68,7 +68,19 @@ export default class Overlay extends React.Component {
 
 
 	componentDidMount() {
-		let ws = new ReconnectingWebSocket(this.props.backend)
+
+		// Set view for this instance
+		let viewparam = new URLSearchParams(window.location.search).get('view');
+		let intendedView
+		if (viewparam && [0, 1, 2].includes(Number.parseInt(+viewparam))) {
+			intendedView = +viewparam;
+		} else {
+			intendedView = 0;
+		}
+		this.setState({ ...this.state, showView: +viewparam });
+
+		// Set up socket connection
+		let ws = new ReconnectingWebSocket(`ws://${this.props.backend}`)
 		ws.onmessage = (msg) => {
 			var msgJson = JSON.parse(msg.data)
 			console.log(msgJson);
@@ -77,7 +89,7 @@ export default class Overlay extends React.Component {
 			}
 
 			if (msgJson.event === "newState") {
-				console.log(this)
+				if (!msgJson || !msgJson.data) return;
 				this.setState(msgJson.data)
 			}
 
@@ -86,8 +98,24 @@ export default class Overlay extends React.Component {
 			}
 
 			if (msgJson.event === "newConfig") {
-				console.log(msgJson.data)
+				if (!msgJson || !msgJson.data) return;
 				this.config = msgJson.data
+
+				if (!["home", "away"].includes(this.config.whoIsBlueSide)) throw new Error("Must have who is blue side!");
+				var homeIsBlue = this.config.whoIsBlueSide === 'home';
+
+				// set blue in config
+				this.config.blueTeamName = homeIsBlue ? this.config.homeTeamName : this.config.awayTeamName;
+				this.config.blueTeamAbbr = homeIsBlue ? this.config.homeTeamAbbr : this.config.awayTeamAbbr;
+				this.config.blueTeamSubtext = homeIsBlue ? this.config.homeTeamSubtext : this.config.awayTeamSubtext;
+				this.config.blueTeamScore = homeIsBlue ? this.config.homeTeamScore : this.config.awayTeamScore;
+
+				// set red in config
+				this.config.redTeamName = !homeIsBlue ? this.config.homeTeamName : this.config.awayTeamName;
+				this.config.redTeamAbbr = !homeIsBlue ? this.config.homeTeamAbbr : this.config.awayTeamAbbr;
+				this.config.redTeamSubtext = !homeIsBlue ? this.config.homeTeamSubtext : this.config.awayTeamSubtext;
+				this.config.redTeamScore = !homeIsBlue ? this.config.homeTeamScore : this.config.awayTeamScore;
+
 				this.setState(this.state)
 			}
 
@@ -178,9 +206,9 @@ export default class Overlay extends React.Component {
 						{getTimerRep()}
 					</div>
 					<div className="starting-soon-teams">
-						<div>{this.config.blueTeamAbbr} - {this.config.blueTeamScore}</div> 
+						<div>{this.config.homeTeamAbbr} - {this.config.homeTeamScore}</div>
 						<div>vs.</div>
-						<div>{this.config.redTeamAbbr} - {this.config.redTeamScore}</div> 
+						<div>{this.config.awayTeamAbbr} - {this.config.awayTeamScore}</div>
 					</div>
 				</div>
 			case 1:
@@ -227,7 +255,7 @@ export default class Overlay extends React.Component {
 							/>
 							<div className="red-team-info">
 								<h1>{this.config.redTeamName}</h1>
-								<h5>{this.config.redTeamSubText}</h5>
+								<h5>{this.config.redTeamSubtext}</h5>
 							</div>
 						</div>
 

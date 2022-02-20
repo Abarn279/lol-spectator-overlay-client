@@ -32,7 +32,7 @@ function createConfigWindow() {
     // winConf.loadFile('config.html')
     winConf.loadFile(path.join(__dirname, '../config.html'));
     // Open the DevTools.
-    winConf.webContents.openDevTools()
+    // winConf.webContents.openDevTools()
 
     // Emitted when the window is closed.
     winConf.on('closed', () => {
@@ -89,17 +89,14 @@ ipcMain.handle("connect-to-client", async (event) => {
 })
 
 server = express();
-
-console.log(path.join(__dirname, "..", "build"));
-
 server.use(express.static(path.join(__dirname, "..", "build")));
 
-server.get('/images/*', function(req,res) {
+server.get('/images/*', function (req, res) {
     res.sendFile(path.join(app.getPath('userData'), "images", req.params[0]))
 })
 
-server.get('*', function(req,res) {
-    res.sendFile(path.join(__dirname,"..", "build", "index.html"))
+server.get('*', function (req, res) {
+    res.sendFile(path.join(__dirname, "..", "build", "index.html"))
 })
 
 serverSocket = server.listen(WEBSERVER_PORT, () => {
@@ -129,14 +126,13 @@ ipcMain.on("newConfig", (event, newConfig) => {
     config = mergePatch.apply(config, newConfig);
     console.log("on newConfig", config)
     fs.writeFile(path.join(__dirname, "..", "config.json"), JSON.stringify(config), (err) => { console.log(err) })
-
+    webSocketServer.latestConfig = config;
     configEventEmitter.emit("newConfig", config)
 });
 
 configEventEmitter.addListener("newConfig", (config) => {
     webSocketServer.sendToAllClients(JSON.stringify({ "event": "newConfig", "data": config }))
 })
-
 
 ipcMain.on("getConfig", () => {
     winConf.webContents.send("newConfig", config)
@@ -147,17 +143,10 @@ ipcMain.handle('update-images', () => {
     checkForNewChampionImages();
 });
 
-/* Begin: Start/end game */
-ipcMain.on("selectView", (e, viewSelected) => {
-    webSocketServer.sendToAllClients(JSON.stringify({ "event": "selectView", "data": viewSelected }))
-})
-/* End: Start/end game */
-
 /* Begin: TIMER */
 ipcMain.on("timerUpdated", (e, time) => {
     webSocketServer.sendToAllClients(JSON.stringify({ "event": "timerUpdated", "data": time }))
 })
-
 /* End: TIMER */
 
 setInterval(() => {

@@ -298,7 +298,7 @@ body{
   width: 252px;
   position: absolute;
   top: 3px;
-  height: 58px;
+  height: 50;
   padding-top: 5px;
   color: white;
   font-size: 40px;
@@ -306,18 +306,18 @@ body{
 }
 
 .ingame-team:nth-child(1) {
-  left: 248px;
+  left: 195px;
 }
 
 .ingame-team:nth-child(2) {
-  right: 237px;
+  right: 180px;
 }
 
 .ingame-stream-title {
   padding-top: 7px;
   position: absolute;
   width: 696px;
-  top: 789px;
+  top: 786px;
   left: 618px;
   height: 55px;
   font-size: 36px;
@@ -331,7 +331,6 @@ body{
   height: 270px;
   left: 2px; 
   width: 310px;
-  border: 1px solid pink;
 }
 
 .ingame-logo-holder img {
