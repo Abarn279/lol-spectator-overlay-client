@@ -1,0 +1,10 @@
+{
+    "teams": [
+        { "name": "Penguin Pajama Party", "Captain": "Abarn", "Acronym": "PPP" },
+        { "name": "Tails Never Fails", "Captain": "Lemonilla", "Acronym": "TNF" },
+        { "name": "Drink More Water", "Captain": "Swiss", "Acronym": "DMW" },
+        { "name": "Snakerdoodles", "Captain": "Bush League", "Acronym": "SNEK" },
+        { "name": "Beautiful Mutant Sausages", "Captain": "IREP", "Acronym": "BMS" },
+        { "name": "Ride or Die", "Captain": "Rudy", "Acronym": "RoD" }
+    ]
+}

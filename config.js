@@ -47,6 +47,26 @@ updateImages.addEventListener('click', () => {
 	})
 })
 
+/* Start - Team Selector */
+var teams = require('./teams.json').teams;
+var teamSelectorContainer = document.getElementById("team-selector");
+
+for (var i = 0; i < 2; i++) {
+	var select = document.createElement('select');
+	select.id = i == 0 ? 'home-team-select': 'away-team-select';
+
+	teams.forEach((item, idx) => {
+		let option = document.createElement('option');
+		option.value = idx;
+		option.textContent = item.name;
+
+		select.appendChild(option)
+	})
+	teamSelectorContainer.append(select);
+}
+
+
+
 /* START - TIMER */
 var timerInput = document.getElementById("timer_input");
 var timerStart = document.getElementById("timer_start");
@@ -78,8 +98,8 @@ setInterval(() => {
 }, 1000)
 /* END - TIMER */
 
-var blueColorInput = document.getElementById("blue_selected_color");
-var redColorInput = document.getElementById("red_selected_color");
+// var blueColorInput = document.getElementById("blue_selected_color");
+// var redColorInput = document.getElementById("red_selected_color");
 var timerTextColorInput = document.getElementById("timer_text_selected_color");
 var blueTextColorInput = document.getElementById("blue_text_selected_color");
 var redTextColorInput = document.getElementById("red_text_selected_color");
@@ -92,35 +112,35 @@ var blueTextColorHex = document.getElementById("blue_text_color_hex")
 var redTextColorHex = document.getElementById("red_text_color_hex")
 var phaseTextColorHex = document.getElementById("phase_text_color_hex")
 var streamTitle = document.getElementById("stream_title")
-var homeTeamName = document.getElementById("home_team_name")
-var homeTeamAbbr = document.getElementById("home_team_abbr")
-var homeTeamSubtext = document.getElementById("home_team_subtext")
+// var homeTeamName = document.getElementById("home_team_name")
+// var homeTeamAbbr = document.getElementById("home_team_abbr")
+// var homeTeamSubtext = document.getElementById("home_team_subtext")
 var homeTeamScore = document.getElementById("home_team_score")
-var awayTeamName = document.getElementById("away_team_name")
-var awayTeamAbbr = document.getElementById("away_team_abbr")
-var awayTeamSubtext = document.getElementById("away_team_subtext")
+// var awayTeamName = document.getElementById("away_team_name")
+// var awayTeamAbbr = document.getElementById("away_team_abbr")
+// var awayTeamSubtext = document.getElementById("away_team_subtext")
 var awayTeamScore = document.getElementById("away_team_score")
 var whoIsBlueSide = document.getElementById("blue_selector")
 var pickingText = document.getElementById("picking_text")
 
-blueColorInput.addEventListener("change", (ev) => {
-	blueColorHex.innerHTML = "(" + ev.target.value + ")"
-})
-redColorInput.addEventListener("change", (ev) => {
-	redColorHex.innerHTML = "(" + ev.target.value + ")"
-})
-timerTextColorInput.addEventListener("change", (ev) => {
-	timerColorHex.innerHTML = "(" + ev.target.value + ")"
-})
-blueTextColorInput.addEventListener("change", (ev) => {
-	blueTextColorHex.innerHTML = "(" + ev.target.value + ")"
-})
-redTextColorInput.addEventListener("change", (ev) => {
-	redTextColorHex.innerHTML = "(" + ev.target.value + ")"
-})
-phaseTextColorInput.addEventListener("change", (ev) => {
-	phaseTextColorHex.innerHTML = "(" + ev.target.value + ")"
-})
+// blueColorInput.addEventListener("change", (ev) => {
+// 	blueColorHex.innerHTML = "(" + ev.target.value + ")"
+// })
+// redColorInput.addEventListener("change", (ev) => {
+// 	redColorHex.innerHTML = "(" + ev.target.value + ")"
+// })
+// timerTextColorInput.addEventListener("change", (ev) => {
+// 	timerColorHex.innerHTML = "(" + ev.target.value + ")"
+// })
+// blueTextColorInput.addEventListener("change", (ev) => {
+// 	blueTextColorHex.innerHTML = "(" + ev.target.value + ")"
+// })
+// redTextColorInput.addEventListener("change", (ev) => {
+// 	redTextColorHex.innerHTML = "(" + ev.target.value + ")"
+// })
+// phaseTextColorInput.addEventListener("change", (ev) => {
+// 	phaseTextColorHex.innerHTML = "(" + ev.target.value + ")"
+// })
 
 var enableCustomNamesInput = document.getElementById("enable_custom_names")
 var enableTransparent = document.getElementById('enable_transparent')
@@ -159,21 +179,21 @@ var summonerNameInput10 = document.getElementById("summonerName10")
 ipc.on("newConfig", (event, newConfig) => {
 	console.log("newConfig", newConfig)
 	config = newConfig;
-	blueColorInput.setAttribute("value", config.blueColor)
-	redColorInput.setAttribute("value", config.redColor)
-	timerTextColorInput.setAttribute("value", config.timerColor)
-	blueTextColorInput.setAttribute("value", config.blueTextColor)
-	redTextColorInput.setAttribute("value", config.redTextColor)
-	phaseTextColorInput.setAttribute("value", config.phaseTextColor)
+	// blueColorInput.setAttribute("value", config.blueColor)
+	// redColorInput.setAttribute("value", config.redColor)
+	// timerTextColorInput.setAttribute("value", config.timerColor)
+	// blueTextColorInput.setAttribute("value", config.blueTextColor)
+	// redTextColorInput.setAttribute("value", config.redTextColor)
+	// phaseTextColorInput.setAttribute("value", config.phaseTextColor)
 
 	streamTitle.setAttribute("value", config.streamTitle);
-	homeTeamName.setAttribute("value", config.homeTeamName)
-	homeTeamAbbr.setAttribute("value", config.homeTeamAbbr)
-	homeTeamSubtext.setAttribute("value", config.homeTeamSubtext)
+	// homeTeamName.setAttribute("value", config.homeTeamName)
+	// homeTeamAbbr.setAttribute("value", config.homeTeamAbbr)
+	// homeTeamSubtext.setAttribute("value", config.homeTeamSubtext)
 	homeTeamScore.setAttribute("value", config.homeTeamScore);
-	awayTeamName.setAttribute("value", config.awayTeamName)
-	awayTeamAbbr.setAttribute("value", config.awayTeamAbbr)
-	awayTeamSubtext.setAttribute("value", config.awayTeamSubText)
+	// awayTeamName.setAttribute("value", config.awayTeamName)
+	// awayTeamAbbr.setAttribute("value", config.awayTeamAbbr)
+	// awayTeamSubtext.setAttribute("value", config.awayTeamSubText)
 	awayTeamScore.setAttribute("value", config.awayTeamScore)
 	whoIsBlueSide.setAttribute("value", config.whoIsBlueSide)
 	pickingText.setAttribute("value", config.pickingText)
@@ -181,12 +201,12 @@ ipc.on("newConfig", (event, newConfig) => {
 	enableCustomNamesInput.setAttribute("checked", config.enableCustomNames)
 	enableTransparent.setAttribute("checked", config.enableTransparent)
 
-	blueColorHex.innerHTML = "(" + config.blueColor + ")"
-	redColorHex.innerHTML = "(" + config.redColor + ")"
-	timerColorHex.innerHTML = "(" + config.timerColor + ")"
-	blueTextColorHex.innerHTML = "(" + config.blueTextColor + ")"
-	redTextColorHex.innerHTML = "(" + config.redTextColor + ")"
-	phaseTextColorHex.innerHTML = "(" + config.phaseTextColor + ")"
+	// blueColorHex.innerHTML = "(" + config.blueColor + ")"
+	// redColorHex.innerHTML = "(" + config.redColor + ")"
+	// timerColorHex.innerHTML = "(" + config.timerColor + ")"
+	// blueTextColorHex.innerHTML = "(" + config.blueTextColor + ")"
+	// redTextColorHex.innerHTML = "(" + config.redTextColor + ")"
+	// phaseTextColorHex.innerHTML = "(" + config.phaseTextColor + ")"
 });
 
 ipc.send("getConfig")
