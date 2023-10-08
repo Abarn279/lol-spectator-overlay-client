@@ -202,13 +202,15 @@ export default class Overlay extends React.Component {
 			case 0:
 				return <div className="starting-soon">
 					<h1>{this.config.streamTitle}</h1>
-					<div className="starting-soon-timer">
+					{/* <div className="starting-soon-timer">
 						{getTimerRep()}
-					</div>
+					</div> */}
 					<div className="starting-soon-teams">
-						<div>{this.config.homeTeamAbbr} - {this.config.homeTeamScore}</div>
-						<div>vs.</div>
-						<div>{this.config.awayTeamAbbr} - {this.config.awayTeamScore}</div>
+						{/* <div>vs</div> */}
+					</div>
+					<div className="captains">
+						<div>{this.config.homeTeamSubtext}</div>
+						<div>{this.config.awayTeamSubtext}</div>
 					</div>
 				</div>
 			case 1:
@@ -281,17 +283,31 @@ export default class Overlay extends React.Component {
 			case 2:
 				return this.state.showInGameOverlay
 					? <div className="ingame-overlay">
-						<img src={require("../assets/ingameoverlay.png").default} />
+						<img style={ {position: "absolute"}} src={require("../assets/ingameoverlay.png").default} />
+						<video width="1920" height="1080" autoPlay loop>
+							<source src={require("../assets/Ingame Overlay.webm").default}/>
+						</video>
 						<div class="teams">
 							<IngameTeam abbr={this.config.blueTeamAbbr} score={this.config.blueTeamScore} />
 							<IngameTeam abbr={this.config.redTeamAbbr} score={this.config.redTeamScore} />
 						</div>
-						<div class="ingame-stream-title">{this.config.streamTitle}</div>
-						<div class="ingame-logo-holder">
+						{/* <div class="ingame-stream-title">{this.config.streamTitle}</div> */}
+						{/* <div class="ingame-logo-holder">
 							<img src={require("../assets/mini.png").default} />
-						</div>
+						</div> */}
 					</div>
 					: <></>
+			case 3:
+				return <div className="starting-soon">
+					<div className="starting-soon-timer analyst">
+						{getTimerRep()}
+					</div>
+					<div className="starting-soon-teams analyst">
+						<div>{this.config.homeTeamAbbr} - {this.config.homeTeamScore}</div>
+						<div>vs.</div>
+						<div>{this.config.awayTeamAbbr} - {this.config.awayTeamScore}</div>
+					</div>
+				</div>
 			default:
 				return <></>
 		}
