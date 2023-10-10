@@ -283,15 +283,15 @@ export default class Overlay extends React.Component {
 			case 2:
 				return this.state.showInGameOverlay
 					? <div className="ingame-overlay">
-						<img style={ {position: "absolute"}} src={require("../assets/ingameoverlay.png").default} />
+						{/* <img style={ {position: "absolute"}} src={require("../assets/ingameoverlay.png").default} /> */}
 						<video width="1920" height="1080" autoPlay loop>
-							<source src={require("../assets/Ingame Overlay.webm").default}/>
+							<source src={require("../assets/overlay.webm").default}/>
 						</video>
 						<div class="teams">
 							<IngameTeam abbr={this.config.blueTeamAbbr} score={this.config.blueTeamScore} />
 							<IngameTeam abbr={this.config.redTeamAbbr} score={this.config.redTeamScore} />
 						</div>
-						{/* <div class="ingame-stream-title">{this.config.streamTitle}</div> */}
+						<div class="ingame-stream-title">{this.config.streamTitle}</div>
 						{/* <div class="ingame-logo-holder">
 							<img src={require("../assets/mini.png").default} />
 						</div> */}
