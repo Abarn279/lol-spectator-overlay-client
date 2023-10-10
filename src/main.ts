@@ -32,7 +32,7 @@ function createConfigWindow() {
     // winConf.loadFile('config.html')
     winConf.loadFile(path.join(__dirname, '../config.html'));
     // Open the DevTools.
-    // winConf.webContents.openDevTools()
+    winConf.webContents.openDevTools()
 
     // Emitted when the window is closed.
     winConf.on('closed', () => {
