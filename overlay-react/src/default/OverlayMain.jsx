@@ -9,6 +9,15 @@ import Timer from "./Timer";
 import ReconnectingWebSocket from "reconnecting-websocket"
 import IngameTeam from "./IngameTeam";
 
+const teams = {
+	0: { name: "Penguin Pajama Party", captain: "Abarn", acronym: "PPP", },
+	1: { name: "Tails Never Fails", captain: "Lemonilla", acronym: "TNF" },
+	2: { name: "Drink More Water", captain: "Swiss", acronym: "DMW" },
+	3: { name: "Snakerdoodles", captain: "Bush League", acronym: "SNEK" },
+	4: { name: "Beautiful Mutant Sausages", captain: "IREP", acronym: "BMS" },
+	5: { name: "Ride or Die", captain: "Rudy", acronym: "RoD" }
+}
+
 export default class Overlay extends React.Component {
 	constructor(props) {
 		super(props);
@@ -52,13 +61,9 @@ export default class Overlay extends React.Component {
 			blueTextColor: "#fff",
 			redTextColor: "#fff",
 			phaseTextColor: "#fff",
-			homeTeamName: "",
-			homeTeamAbbr: "HOM",
-			homeTeamSubtext: "",
+			homeTeamId: 0,
 			homeTeamScore: 0,
-			awayTeamName: "",
-			awayTeamAbbr: "AWY",
-			awayTeamSubtext: "",
+			awayTeamId: 0,
 			awayTeamScore: 0,
 			whoIsBlueSide: "home",
 			pickingText: "Picking",
@@ -104,16 +109,15 @@ export default class Overlay extends React.Component {
 				if (!["home", "away"].includes(this.config.whoIsBlueSide)) throw new Error("Must have who is blue side!");
 				var homeIsBlue = this.config.whoIsBlueSide === 'home';
 
+				this.config.homeTeam = teams[this.config.homeTeamId]
+				this.config.awayTeam = teams[this.config.awayTeamId]
+
 				// set blue in config
-				this.config.blueTeamName = homeIsBlue ? this.config.homeTeamName : this.config.awayTeamName;
-				this.config.blueTeamAbbr = homeIsBlue ? this.config.homeTeamAbbr : this.config.awayTeamAbbr;
-				this.config.blueTeamSubtext = homeIsBlue ? this.config.homeTeamSubtext : this.config.awayTeamSubtext;
+				this.config.blueTeam = homeIsBlue ? teams[this.config.homeTeamId] : teams[this.config.awayTeamId]
 				this.config.blueTeamScore = homeIsBlue ? this.config.homeTeamScore : this.config.awayTeamScore;
 
 				// set red in config
-				this.config.redTeamName = !homeIsBlue ? this.config.homeTeamName : this.config.awayTeamName;
-				this.config.redTeamAbbr = !homeIsBlue ? this.config.homeTeamAbbr : this.config.awayTeamAbbr;
-				this.config.redTeamSubtext = !homeIsBlue ? this.config.homeTeamSubtext : this.config.awayTeamSubtext;
+				this.config.redTeam = !homeIsBlue ? teams[this.config.homeTeamId] : teams[this.config.awayTeamId]
 				this.config.redTeamScore = !homeIsBlue ? this.config.homeTeamScore : this.config.awayTeamScore;
 
 				this.setState(this.state)
@@ -195,6 +199,7 @@ export default class Overlay extends React.Component {
 
 			secondsLeft = (secondsLeft % 60).toString();
 			if (secondsLeft.length === 1) secondsLeft = '0' + secondsLeft;
+			console.log(`${minutesLeft}:${secondsLeft}`)
 			return `${minutesLeft}:${secondsLeft}`;
 		}
 
@@ -202,29 +207,43 @@ export default class Overlay extends React.Component {
 			case 0:
 				return <div className="starting-soon">
 					<h1>{this.config.streamTitle}</h1>
-					{/* <div className="starting-soon-timer">
+					<div className="starting-soon-timer">
 						{getTimerRep()}
-					</div> */}
-					<div className="starting-soon-teams">
-						{/* <div>vs</div> */}
 					</div>
-					<div className="captains">
-						<div>{this.config.homeTeamSubtext}</div>
-						<div>{this.config.awayTeamSubtext}</div>
-					</div>
+					{this.config.homeTeamId && this.config.awayTeamId && (
+						<div className="starting-soon-teams">
+							<img class="home" src={require(`../assets/team-logos/${this.config.homeTeamId}.png`).default} />
+							<img class="away" src={require(`../assets/team-logos/${this.config.awayTeamId}.png`).default} />
+						</div>
+					)}
+					{this.config.homeTeam && this.config.awayTeam && (
+						<div className="captains">
+							<div className="home">
+								<img src={require(`../assets/headshots/${this.config.homeTeamId}.png`).default} />
+								<div>{this.config.homeTeam.captain}</div>
+							</div>
+							<div className="away">
+								<img src={require(`../assets/headshots/${this.config.awayTeamId}.png`).default} />
+								<div>{this.config.awayTeam.captain}</div>
+							</div>
+						</div>
+					)}
 				</div>
 			case 1:
 				return (
 					<div
 						className="overlay"
 						style={style} //{{ width: 1280, height: 720 ,zoom:1.25 }}
-						className={cx("overlay", this.state.actingSide + "-acting", { "transparent": this.config.enableTransparent })}
+						className={cx("overlay", this.state.actingSide + "-acting", { "transparent": true })}
 					>
 						<div className="champion-select-header">
-							<div className="blue-team-info">
-								<h1>{this.config.blueTeamName}</h1>
-								<h5>{this.config.blueTeamSubtext}</h5>
-							</div>
+							{this.config.blueTeam && (
+								<div className="blue-team-info">
+									<h1>{this.config.blueTeam.name}</h1>
+									<h5>{this.config.blueTeam.captain}</h5>
+								</div>
+							)}
+
 							<Timer
 								side="blue"
 								visible={
@@ -255,10 +274,12 @@ export default class Overlay extends React.Component {
 								actingSide={this.state.actingSide}
 								timestamp={this.state.timestamp}
 							/>
-							<div className="red-team-info">
-								<h1>{this.config.redTeamName}</h1>
-								<h5>{this.config.redTeamSubtext}</h5>
-							</div>
+							{this.config.redTeam && (
+								<div className="red-team-info">
+									<h1>{this.config.redTeam.name}</h1>
+									<h5>{this.config.redTeam.captain}</h5>
+								</div>
+							)}
 						</div>
 
 						<div className="party" id="blueParty">
@@ -285,29 +306,31 @@ export default class Overlay extends React.Component {
 					? <div className="ingame-overlay">
 						{/* <img style={ {position: "absolute"}} src={require("../assets/ingameoverlay.png").default} /> */}
 						<video width="1920" height="1080" autoPlay loop>
-							<source src={require("../assets/overlay.webm").default}/>
+							<source src={require("../assets/overlay.webm").default} />
 						</video>
-						<div class="teams">
-							<IngameTeam abbr={this.config.blueTeamAbbr} score={this.config.blueTeamScore} />
-							<IngameTeam abbr={this.config.redTeamAbbr} score={this.config.redTeamScore} />
-						</div>
+						{this.config.blueTeam && this.config.redTeam && (
+							<div class="teams">
+								<IngameTeam abbr={this.config.blueTeam.acronym} score={this.config.blueTeamScore} />
+								<IngameTeam abbr={this.config.redTeam.acronym} score={this.config.redTeamScore} />
+							</div>
+						)}
 						<div class="ingame-stream-title">{this.config.streamTitle}</div>
 						{/* <div class="ingame-logo-holder">
 							<img src={require("../assets/mini.png").default} />
 						</div> */}
 					</div>
 					: <></>
-			case 3:
-				return <div className="starting-soon">
-					<div className="starting-soon-timer analyst">
-						{getTimerRep()}
-					</div>
-					<div className="starting-soon-teams analyst">
-						<div>{this.config.homeTeamAbbr} - {this.config.homeTeamScore}</div>
-						<div>vs.</div>
-						<div>{this.config.awayTeamAbbr} - {this.config.awayTeamScore}</div>
-					</div>
-				</div>
+			// case 3:
+			// 	return <div className="starting-soon">
+			// 		<div className="starting-soon-timer analyst">
+			// 			{getTimerRep()}
+			// 		</div>
+			// 		<div className="starting-soon-teams analyst">
+			// 			<div>{this.config.homeTeam.acronym} - {this.config.homeTeamScore}</div>
+			// 			<div>vs.</div>
+			// 			<div>{this.config.awayTeam.acronym} - {this.config.awayTeamScore}</div>
+			// 		</div>
+			// 	</div>
 			default:
 				return <></>
 		}

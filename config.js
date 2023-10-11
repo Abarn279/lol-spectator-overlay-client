@@ -52,8 +52,7 @@ var teams = require('./teams.json').teams;
 var teamSelectorContainer = document.getElementById("team-selector");
 
 for (var i = 0; i < 2; i++) {
-	var select = document.createElement('select');
-	select.id = i == 0 ? 'home-team-select': 'away-team-select';
+	var select = document.getElementById(i == 0 ? 'home-team-select': 'away-team-select');
 
 	teams.forEach((item, idx) => {
 		let option = document.createElement('option');
@@ -62,10 +61,7 @@ for (var i = 0; i < 2; i++) {
 
 		select.appendChild(option)
 	})
-	teamSelectorContainer.append(select);
 }
-
-
 
 /* START - TIMER */
 var timerInput = document.getElementById("timer_input");
@@ -98,156 +94,32 @@ setInterval(() => {
 }, 1000)
 /* END - TIMER */
 
-// var blueColorInput = document.getElementById("blue_selected_color");
-// var redColorInput = document.getElementById("red_selected_color");
-var timerTextColorInput = document.getElementById("timer_text_selected_color");
-var blueTextColorInput = document.getElementById("blue_text_selected_color");
-var redTextColorInput = document.getElementById("red_text_selected_color");
-var phaseTextColorInput = document.getElementById("phase_text_selected_color");
-
-var blueColorHex = document.getElementById("blue_color_hex")
-var redColorHex = document.getElementById("red_color_hex")
-var timerColorHex = document.getElementById("timer_color_hex")
-var blueTextColorHex = document.getElementById("blue_text_color_hex")
-var redTextColorHex = document.getElementById("red_text_color_hex")
-var phaseTextColorHex = document.getElementById("phase_text_color_hex")
 var streamTitle = document.getElementById("stream_title")
-// var homeTeamName = document.getElementById("home_team_name")
-// var homeTeamAbbr = document.getElementById("home_team_abbr")
-// var homeTeamSubtext = document.getElementById("home_team_subtext")
 var homeTeamScore = document.getElementById("home_team_score")
-// var awayTeamName = document.getElementById("away_team_name")
-// var awayTeamAbbr = document.getElementById("away_team_abbr")
-// var awayTeamSubtext = document.getElementById("away_team_subtext")
 var awayTeamScore = document.getElementById("away_team_score")
 var whoIsBlueSide = document.getElementById("blue_selector")
-var pickingText = document.getElementById("picking_text")
-
-// blueColorInput.addEventListener("change", (ev) => {
-// 	blueColorHex.innerHTML = "(" + ev.target.value + ")"
-// })
-// redColorInput.addEventListener("change", (ev) => {
-// 	redColorHex.innerHTML = "(" + ev.target.value + ")"
-// })
-// timerTextColorInput.addEventListener("change", (ev) => {
-// 	timerColorHex.innerHTML = "(" + ev.target.value + ")"
-// })
-// blueTextColorInput.addEventListener("change", (ev) => {
-// 	blueTextColorHex.innerHTML = "(" + ev.target.value + ")"
-// })
-// redTextColorInput.addEventListener("change", (ev) => {
-// 	redTextColorHex.innerHTML = "(" + ev.target.value + ")"
-// })
-// phaseTextColorInput.addEventListener("change", (ev) => {
-// 	phaseTextColorHex.innerHTML = "(" + ev.target.value + ")"
-// })
-
-var enableCustomNamesInput = document.getElementById("enable_custom_names")
-var enableTransparent = document.getElementById('enable_transparent')
-
-var swapNamesButton = document.getElementById("swap")
-swapNamesButton.addEventListener("click", function () {
-	var tmp = summonerNameInput1.value
-	summonerNameInput1.setAttribute("value", summonerNameInput6.value)
-	summonerNameInput6.setAttribute("value", tmp)
-	tmp = summonerNameInput2.value
-	summonerNameInput2.setAttribute("value", summonerNameInput7.value)
-	summonerNameInput7.setAttribute("value", tmp)
-	tmp = summonerNameInput3.value
-	summonerNameInput3.setAttribute("value", summonerNameInput8.value)
-	summonerNameInput8.setAttribute("value", tmp)
-	tmp = summonerNameInput4.value
-	summonerNameInput4.setAttribute("value", summonerNameInput9.value)
-	summonerNameInput9.setAttribute("value", tmp)
-	tmp = summonerNameInput5.value
-	summonerNameInput5.setAttribute("value", summonerNameInput10.value)
-	summonerNameInput10.setAttribute("value", tmp)
-})
-
-var summonerNameInput1 = document.getElementById("summonerName1")
-var summonerNameInput2 = document.getElementById("summonerName2")
-var summonerNameInput3 = document.getElementById("summonerName3")
-var summonerNameInput4 = document.getElementById("summonerName4")
-var summonerNameInput5 = document.getElementById("summonerName5")
-var summonerNameInput6 = document.getElementById("summonerName6")
-var summonerNameInput7 = document.getElementById("summonerName7")
-var summonerNameInput8 = document.getElementById("summonerName8")
-var summonerNameInput9 = document.getElementById("summonerName9")
-var summonerNameInput10 = document.getElementById("summonerName10")
-
 
 ipc.on("newConfig", (event, newConfig) => {
 	console.log("newConfig", newConfig)
 	config = newConfig;
-	// blueColorInput.setAttribute("value", config.blueColor)
-	// redColorInput.setAttribute("value", config.redColor)
-	// timerTextColorInput.setAttribute("value", config.timerColor)
-	// blueTextColorInput.setAttribute("value", config.blueTextColor)
-	// redTextColorInput.setAttribute("value", config.redTextColor)
-	// phaseTextColorInput.setAttribute("value", config.phaseTextColor)
 
 	streamTitle.setAttribute("value", config.streamTitle);
-	// homeTeamName.setAttribute("value", config.homeTeamName)
-	// homeTeamAbbr.setAttribute("value", config.homeTeamAbbr)
-	// homeTeamSubtext.setAttribute("value", config.homeTeamSubtext)
 	homeTeamScore.setAttribute("value", config.homeTeamScore);
-	// awayTeamName.setAttribute("value", config.awayTeamName)
-	// awayTeamAbbr.setAttribute("value", config.awayTeamAbbr)
-	// awayTeamSubtext.setAttribute("value", config.awayTeamSubText)
 	awayTeamScore.setAttribute("value", config.awayTeamScore)
 	whoIsBlueSide.setAttribute("value", config.whoIsBlueSide)
-	pickingText.setAttribute("value", config.pickingText)
-
-	enableCustomNamesInput.setAttribute("checked", config.enableCustomNames)
-	enableTransparent.setAttribute("checked", config.enableTransparent)
-
-	// blueColorHex.innerHTML = "(" + config.blueColor + ")"
-	// redColorHex.innerHTML = "(" + config.redColor + ")"
-	// timerColorHex.innerHTML = "(" + config.timerColor + ")"
-	// blueTextColorHex.innerHTML = "(" + config.blueTextColor + ")"
-	// redTextColorHex.innerHTML = "(" + config.redTextColor + ")"
-	// phaseTextColorHex.innerHTML = "(" + config.phaseTextColor + ")"
 });
 
 ipc.send("getConfig")
 
 var updateButton = document.getElementById("update")
 updateButton.addEventListener("click", function () {
-	var blueColorInput = document.getElementById("blue_selected_color");
-	var redColorInput = document.getElementById("red_selected_color");
-	var timerTextColorInput = document.getElementById("timer_text_selected_color");
 	ipc.send("newConfig", {
-		blueColor: blueColorInput.value,
-		redColor: redColorInput.value,
-		timerColor: timerTextColorInput.value,
-		blueTextColor: blueTextColorInput.value,
-		redTextColor: redTextColorInput.value,
-		phaseTextColor: phaseTextColorInput.value,
-		enableCustomNames: enableCustomNamesInput.checked,
-		names: [
-			summonerNameInput1.value,
-			summonerNameInput2.value,
-			summonerNameInput3.value,
-			summonerNameInput4.value,
-			summonerNameInput5.value,
-			summonerNameInput6.value,
-			summonerNameInput7.value,
-			summonerNameInput8.value,
-			summonerNameInput9.value,
-			summonerNameInput10.value,
-		],
 		streamTitle: streamTitle.value,
-		homeTeamName: homeTeamName.value,
-		homeTeamAbbr: homeTeamAbbr.value,
-		homeTeamSubtext: homeTeamSubtext.value,
+		homeTeamId: document.getElementById('home-team-select').value,
 		homeTeamScore: homeTeamScore.value,
-		awayTeamName: awayTeamName.value,
-		awayTeamAbbr: awayTeamAbbr.value,
-		awayTeamSubtext: awayTeamSubtext.value,
+		awayTeamId: document.getElementById('away-team-select').value,
 		awayTeamScore: awayTeamScore.value,
 		whoIsBlueSide: whoIsBlueSide.value,
-		pickingText: pickingText.value,
-		enableTransparent: enableTransparent.checked
 	})
 })
 
@@ -255,7 +127,6 @@ updateButton.addEventListener("click", function () {
 var statusWebServer = document.getElementById("statusWebServer")
 var statusWebSocketServer = document.getElementById("statusWebSocketServer")
 var statusClient = document.getElementById("statusClient")
-
 
 ipc.on("serverStatus", (event, status) => {
 	statusWebServer.innerHTML = "Web Server: " + status.webServer
